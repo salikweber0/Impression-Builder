@@ -187,6 +187,40 @@
                 transform: translateY(0);
             }
         }
+
+        /* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.slide-up-panel {
+    animation: slideUp 0.4s ease-out forwards;
+}
+
+/* Overlay and Panel Styles */
+.overlay-image {
+    transition: transform 0.3s ease;
+}
+
+.overlay-image:hover {
+    transform: scale(1.02);
+}
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -648,189 +682,435 @@
     </footer>
 
     <script>
-        // Sample data
-        const resumeTemplates = [
-            { id: 1, title: 'Modern Executive', category: 'modern', description: 'Perfect for senior professionals', price: '$49' },
-            { id: 2, title: 'Creative Designer', category: 'creative', description: 'Stand out with bold design', price: '$49' },
-            { id: 3, title: 'Minimalist Pro', category: 'minimal', description: 'Clean and simple layout', price: '$49' },
-            { id: 4, title: 'Tech Specialist', category: 'modern', description: 'Ideal for developers', price: '$49' },
-            { id: 5, title: 'Artist Resume', category: 'creative', description: 'Showcase your creativity', price: '$49' },
-            { id: 6, title: 'Academic Resume', category: 'minimal', description: 'For researchers', price: '$49' }
-        ];
+        document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+    
+    // Resume Templates with separate card and preview images
+    const resumeTemplates = [
+        { 
+            id: 1, 
+            title: 'Modern Executive', 
+            category: 'modern', 
+            cardImage: 'Modern.png',
+            previewImage: 'Modern.png',
+            description: 'Perfect for senior professionals',
+            features: ['ATS-Friendly Design', 'Professional Layout', 'Easy to Customize', 'PDF Export Ready'],
+            benefits: ['Stand out to recruiters', 'Get more interviews', 'Highlight your achievements', 'Professional appearance']
+        },
+        { 
+            id: 2, 
+            title: 'Creative Designer', 
+            category: 'creative', 
+            cardImage: 'Creative.png',
+            previewImage: 'resume.png',
+            description: 'Stand out with bold design',
+            features: ['Creative Layout', 'Eye-catching Design', 'Portfolio Ready', 'Fully Customizable'],
+            benefits: ['Show your creativity', 'Impress designers', 'Unique presentation', 'Modern look']
+        },
+        { 
+            id: 3, 
+            title: 'Minimalist Pro', 
+            category: 'minimal', 
+            cardImage: 'Minimalist.png',
+            previewImage: 'resume.png',
+            description: 'Clean and simple layout',
+            features: ['Clean Design', 'Minimal Layout', 'Focus on Content', 'ATS Compatible'],
+            benefits: ['Easy to read', 'Professional look', 'Content focused', 'Simple yet elegant']
+        },
+        { 
+            id: 4, 
+            title: 'Tech Specialist', 
+            category: 'modern', 
+            cardImage: 'Modern.png',
+            previewImage: 'resume.png',
+            description: 'Ideal for developers',
+            features: ['Tech-Focused', 'Code Showcase', 'Project Links', 'Skills Highlighted'],
+            benefits: ['Show your projects', 'Highlight skills', 'Impress tech companies', 'Modern design']
+        },
+        { 
+            id: 5, 
+            title: 'Artist Resume', 
+            category: 'creative', 
+            cardImage: 'creative.png',
+            previewImage: 'resume.png',
+            description: 'Showcase your creativity',
+            features: ['Visual Design', 'Portfolio Integration', 'Creative Layout', 'Gallery Support'],
+            benefits: ['Display artwork', 'Show creativity', 'Impress clients', 'Unique style']
+        },
+        { 
+            id: 6, 
+            title: 'Academic Resume', 
+            category: 'minimal', 
+            cardImage: 'Minimalist.png',
+            previewImage: 'resume.png',
+            description: 'For researchers',
+            features: ['Academic Focus', 'Publication Ready', 'Citation Support', 'Research Highlight'],
+            benefits: ['Showcase research', 'Highlight publications', 'Professional academic look', 'Detail focused']
+        }
+    ];
 
-        const portfolioTemplates = [
-            { id: 1, title: 'Developer Portfolio', category: 'developer', description: 'Showcase your projects', price: '$89' },
-            { id: 2, title: 'Designer Portfolio', category: 'designer', description: 'Display your work', price: '$89' },
-            { id: 3, title: 'Photography Portfolio', category: 'photographer', description: 'Beautiful galleries', price: '$89' },
-            { id: 4, title: 'Full Stack Dev', category: 'developer', description: 'Complete project showcase', price: '$89' },
-            { id: 5, title: 'UI/UX Designer', category: 'designer', description: 'Case study focused', price: '$89' },
-            { id: 6, title: 'Visual Artist', category: 'photographer', description: 'Art-focused portfolio', price: '$89' }
-        ];
+    const portfolioTemplates = [
+        { 
+            id: 1, 
+            title: 'Developer Portfolio', 
+            category: 'developer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Showcase your projects',
+            features: ['Project Showcase', 'GitHub Integration', 'Responsive Design', 'Dark Mode'],
+            benefits: ['Display code projects', 'Impress employers', 'Show live demos', 'Professional portfolio']
+        },
+        { 
+            id: 2, 
+            title: 'Designer Portfolio', 
+            category: 'designer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Display your work',
+            features: ['Design Showcase', 'Case Studies', 'Responsive Layout', 'Fast Loading'],
+            benefits: ['Show design work', 'Client attraction', 'Professional presentation', 'Detailed case studies']
+        },
+        { 
+            id: 3, 
+            title: 'Photography Portfolio', 
+            category: 'photographer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Beautiful galleries',
+            features: ['Gallery Layouts', 'Image Optimization', 'Lightbox Effects', 'Mobile Ready'],
+            benefits: ['Showcase photos', 'Attract clients', 'Professional galleries', 'High performance']
+        },
+        { 
+            id: 4, 
+            title: 'Full Stack Dev', 
+            category: 'developer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Complete project showcase',
+            features: ['Full Tech Stack', 'Project Details', 'Skills Display', 'Contact Integration'],
+            benefits: ['Show full projects', 'Highlight skills', 'Impress companies', 'Complete profile']
+        },
+        { 
+            id: 5, 
+            title: 'UI/UX Designer', 
+            category: 'designer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Case study focused',
+            features: ['Case Studies', 'Design Process', 'User Testing', 'Design Thinking'],
+            benefits: ['Show design process', 'Client confidence', 'Detailed work', 'Professional insight']
+        },
+        { 
+            id: 6, 
+            title: 'Visual Artist', 
+            category: 'photographer', 
+            cardImage: 'thumbnail.png',
+            previewImage: 'portfolio.png',
+            description: 'Art-focused portfolio',
+            features: ['Art Showcase', 'Gallery Display', 'Biography', 'Contact Options'],
+            benefits: ['Display artwork', 'Attract galleries', 'Sell artwork', 'Professional presentation']
+        }
+    ];
 
-        // Create template cards
-        function createCard(template, type) {
-            const colors = {
-                modern: 'from-blue-500 to-purple-600',
-                creative: 'from-purple-500 to-pink-600',
-                minimal: 'from-gray-500 to-gray-700',
-                developer: 'from-green-500 to-teal-600',
-                designer: 'from-pink-500 to-rose-600',
-                photographer: 'from-yellow-500 to-orange-600'
-            };
-            
-            return `
-                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover template-card" data-category="${template.category}">
-                    <div class="h-40 sm:h-48 bg-gradient-to-br ${colors[template.category]} relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <i data-feather="${type === 'resume' ? 'file-text' : 'globe'}" class="w-16 h-16 sm:w-20 sm:h-20 text-white opacity-20"></i>
-                        </div>
-                        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 hover:opacity-100 transition-all duration-300 flex items-center justify-center template-card-overlay">
-                            <button class="px-4 sm:px-6 py-2 sm:py-3 bg-white text-gray-900 font-bold rounded-full hover:scale-110 transition-transform text-sm sm:text-base">
-                                View Details
-                            </button>
-                        </div>
+    // Create template card
+    function createCard(template, type) {
+        const colors = {
+            modern: 'from-blue-500 to-purple-600',
+            creative: 'from-purple-500 to-pink-600',
+            minimal: 'from-gray-500 to-gray-700',
+            developer: 'from-green-500 to-teal-600',
+            designer: 'from-pink-500 to-rose-600',
+            photographer: 'from-yellow-500 to-orange-600'
+        };
+        
+        const card = document.createElement('div');
+        card.className = `bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover`;
+        card.setAttribute('data-category', template.category);
+        card.innerHTML = `
+            <div class="h-48 relative overflow-hidden group bg-gradient-to-br ${colors[template.category]}">
+                <img src="${template.cardImage}" alt="${template.title}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-2">
+                    <button class="view-details-btn px-4 py-2 bg-white text-gray-900 font-bold rounded-full hover:scale-110 transition-transform">
+                        View Details
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">${template.title}</h3>
+                    <span class="px-3 py-1 bg-gradient-to-r ${colors[template.category]} text-white text-sm font-bold rounded-full">$49</span>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">${template.description}</p>
+                <div class="flex gap-2">
+                    <button class="flex-1 py-2 bg-gradient-to-r ${colors[template.category]} text-white font-bold rounded-lg hover:shadow-xl transition-all whatsapp-btn">
+                        <i data-feather="send" class="w-4 h-4 inline mr-1"></i>
+                        WhatsApp
+                    </button>
+                    <button class="px-4 py-2 border-2 border-purple-600 text-purple-600 dark:text-purple-400 font-bold rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all preview-btn">
+                        <i data-feather="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Preview button - Full screen overlay with zoom (shows previewImage)
+        card.querySelector('.preview-btn').addEventListener('click', () => {
+            showPreviewOverlay(template.previewImage, template.title);
+        });
+
+        // WhatsApp button
+        card.querySelector('.whatsapp-btn').addEventListener('click', () => {
+            const message = `Hello Salik Sir, i want to make ${template.title} resume`;
+            const waLink = `https://wa.me/7069331761?text=${encodeURIComponent(message)}`;
+            window.open(waLink, '_blank');
+        });
+
+        // View details button - Bottom slide-up panel
+        card.querySelector('.view-details-btn').addEventListener('click', () => {
+            showDetailsPanel(template);
+        });
+
+        return card;
+    }
+
+    // Preview Overlay - Full screen with scroll (shows actual resume/portfolio image)
+function showPreviewOverlay(imageSrc, title) {
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in';
+    overlay.innerHTML = `
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <button class="close-preview absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors">
+                <i data-feather="x" class="w-8 h-8"></i>
+            </button>
+            <div class="bg-white dark:bg-gray-800 rounded-lg overflow-y-auto shadow-2xl flex-1">
+                <img src="${imageSrc}" alt="${title}" class="w-full object-contain">
+            </div>
+            <div class="mt-4 text-center text-white">
+                <h3 class="text-2xl font-bold">${title}</h3>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    feather.replace();
+
+    // Close on X button
+    overlay.querySelector('.close-preview').addEventListener('click', () => {
+        overlay.remove();
+    });
+
+    // Close on background click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+    // Details Panel - Bottom slide-up
+    function showDetailsPanel(template) {
+        const panel = document.createElement('div');
+        panel.className = 'fixed inset-0 bg-black/50 z-40 flex items-end animate-fade-in';
+        
+        let featuresHTML = template.features.map(f => `
+            <li class="flex items-center text-gray-700 dark:text-gray-300 mb-2">
+                <i data-feather="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                ${f}
+            </li>
+        `).join('');
+
+        let benefitsHTML = template.benefits.map(b => `
+            <li class="flex items-center text-gray-700 dark:text-gray-300 mb-2">
+                <i data-feather="award" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
+                ${b}
+            </li>
+        `).join('');
+
+        panel.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 w-full rounded-t-3xl p-8 max-h-[100vh] overflow-y-auto slide-up-panel">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">${template.title}</h2>
+                    <button class="close-panel text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <i data-feather="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">${template.description}</p>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <i data-feather="star" class="w-5 h-5 mr-2 text-yellow-500"></i>
+                            Features Included
+                        </h3>
+                        <ul class="space-y-0">
+                            ${featuresHTML}
+                        </ul>
                     </div>
-                    <div class="p-4 sm:p-6">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">${template.title}</h3>
-                            <span class="px-2 sm:px-3 py-1 bg-gradient-to-r ${colors[template.category]} text-white text-xs sm:text-sm font-bold rounded-full whitespace-nowrap">${template.price}</span>
-                        </div>
-                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4">${template.description}</p>
-                        <div class="flex gap-2">
-                            <button class="flex-1 py-2 bg-gradient-to-r ${colors[template.category]} text-white font-bold rounded-lg hover:shadow-xl transition-all text-sm sm:text-base">
-                                <i data-feather="shopping-cart" class="w-3 h-3 sm:w-4 sm:h-4 inline mr-1"></i>
-                                Buy Now
-                            </button>
-                            <button class="px-3 sm:px-4 py-2 border-2 border-purple-600 text-purple-600 dark:text-purple-400 font-bold rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all">
-                                <i data-feather="eye" class="w-3 h-3 sm:w-4 sm:h-4"></i>
-                            </button>
-                        </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <i data-feather="zap" class="w-5 h-5 mr-2 text-blue-500"></i>
+                            Key Benefits
+                        </h3>
+                        <ul class="space-y-0">
+                            ${benefitsHTML}
+                        </ul>
                     </div>
                 </div>
-            `;
-        }
 
-        // Load templates
-        const resumeGallery = document.getElementById('resumeGallery');
-        const portfolioGallery = document.getElementById('portfolioGallery');
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">This template is perfect for professionals looking to make an impact. Get started today!</p>
+                    <button class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-lg hover:shadow-xl transition-all contact-from-panel">
+                        <i data-feather="send" class="w-5 h-5 inline mr-2"></i>
+                        Contact Me on WhatsApp
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(panel);
+        feather.replace();
+
+        const closeBtn = panel.querySelector('.close-panel');
+        const contactBtn = panel.querySelector('.contact-from-panel');
+
+        closeBtn.addEventListener('click', () => panel.remove());
         
-        resumeGallery.innerHTML = resumeTemplates.map(t => createCard(t, 'resume')).join('');
-        portfolioGallery.innerHTML = portfolioTemplates.map(t => createCard(t, 'portfolio')).join('');
-
-        // Filter functionality for resumes
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                const parent = this.closest('section');
-                const gallery = parent.querySelector('#resumeGallery');
-                
-                parent.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
-                    b.classList.add('text-gray-700', 'dark:text-gray-300');
-                });
-                this.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
-                this.classList.remove('text-gray-700', 'dark:text-gray-300');
-                
-                gallery.querySelectorAll('[data-category]').forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-                
-                feather.replace();
-            });
+        panel.addEventListener('click', (e) => {
+            if (e.target === panel) panel.remove();
         });
 
-        // Filter functionality for portfolios
-        document.querySelectorAll('.portfolio-filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                const parent = this.closest('section');
-                const gallery = parent.querySelector('#portfolioGallery');
-                
-                parent.querySelectorAll('.portfolio-filter-btn').forEach(b => {
-                    b.classList.remove('bg-gradient-to-r', 'from-teal-600', 'to-green-600', 'text-white');
-                    b.classList.add('text-gray-700', 'dark:text-gray-300');
-                });
-                this.classList.add('bg-gradient-to-r', 'from-teal-600', 'to-green-600', 'text-white');
-                this.classList.remove('text-gray-700', 'dark:text-gray-300');
-                
-                gallery.querySelectorAll('[data-category]').forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-                
-                feather.replace();
+        contactBtn.addEventListener('click', () => {
+            const message = `Hello Salik Sir, i want to make ${template.title} resume`;
+            const waLink = `https://wa.me/7069331761?text=${encodeURIComponent(message)}`;
+            window.open(waLink, '_blank');
+            panel.remove();
+        });
+    }
+
+    // Load templates
+    const resumeGallery = document.getElementById('resumeGallery');
+    const portfolioGallery = document.getElementById('portfolioGallery');
+    
+    if (resumeGallery) {
+        resumeTemplates.forEach(template => {
+            resumeGallery.appendChild(createCard(template, 'resume'));
+        });
+    }
+
+    if (portfolioGallery) {
+        portfolioTemplates.forEach(template => {
+            portfolioGallery.appendChild(createCard(template, 'portfolio'));
+        });
+    }
+
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            const parent = this.closest('section');
+            const gallery = parent.querySelector('#resumeGallery');
+            
+            parent.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
+                b.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            this.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white');
+            this.classList.remove('text-gray-700', 'dark:text-gray-300');
+            
+            gallery.querySelectorAll('[data-category]').forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
+    });
 
-        // Dark mode toggle functionality
-        function toggleDarkMode() {
-            const html = document.documentElement;
+    document.querySelectorAll('.portfolio-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            const parent = this.closest('section');
+            const gallery = parent.querySelector('#portfolioGallery');
+            
+            parent.querySelectorAll('.portfolio-filter-btn').forEach(b => {
+                b.classList.remove('bg-gradient-to-r', 'from-teal-600', 'to-green-600', 'text-white');
+                b.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            this.classList.add('bg-gradient-to-r', 'from-teal-600', 'to-green-600', 'text-white');
+            this.classList.remove('text-gray-700', 'dark:text-gray-300');
+            
+            gallery.querySelectorAll('[data-category]').forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Dark mode toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
+    const html = document.documentElement;
+    
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+    }
+    
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
             html.classList.toggle('dark');
-            const theme = html.classList.contains('dark') ? 'dark' : 'light';
-            try {
-                localStorage.setItem('theme', theme);
-            } catch (e) {
-                console.log('localStorage not available');
-            }
-        }
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+    }
 
-        // Check saved preference
-        try {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-        } catch (e) {
-            console.log('localStorage not available');
-        }
-        
-        document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
-        document.getElementById('darkModeToggleMobile').addEventListener('click', toggleDarkMode);
+    if (darkModeToggleMobile) {
+        darkModeToggleMobile.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+    }
 
-        // Mobile menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Close mobile menu on link click
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
             });
         });
+    }
 
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-white', 'dark:bg-gray-900', 'shadow-lg');
-            } else {
-                navbar.classList.remove('bg-white', 'dark:bg-gray-900', 'shadow-lg');
-            }
-        });
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-white', 'dark:bg-gray-900', 'shadow-lg');
+        } else {
+            navbar.classList.remove('bg-white', 'dark:bg-gray-900', 'shadow-lg');
+        }
+    });
 
-        // Form submission
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Thank you for your message! I will get back to you soon.');
             e.target.reset();
         });
+    }
 
-        // Initialize Feather icons
-        feather.replace();
-        
-        // Re-initialize after dynamic content
-        setTimeout(() => feather.replace(), 500);
+    feather.replace();
+    setTimeout(() => feather.replace(), 500);
+});
     </script>
 </body>
 </html>
